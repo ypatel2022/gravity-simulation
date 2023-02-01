@@ -1,0 +1,22 @@
+﻿  SFML Tutorial.cpp
+C:\Users\Administrator\programming\sfml-gravity-simulation\sfml-gravity-simulation\SFML Tutorial.cpp(32,26): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\Administrator\programming\sfml-gravity-simulation\sfml-gravity-simulation\SFML Tutorial.cpp(33,26): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\Administrator\programming\sfml-gravity-simulation\sfml-gravity-simulation\SFML Tutorial.cpp(148,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Administrator\programming\sfml-gravity-simulation\sfml-gravity-simulation\SFML Tutorial.cpp(148,38): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  SFML Tutorial.vcxproj -> C:\Users\Administrator\programming\sfml-gravity-simulation\x64\Debug\SFML Tutorial.exe
