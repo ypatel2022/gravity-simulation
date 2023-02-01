@@ -6,8 +6,6 @@
 
 int WIDTH = 1920;
 int HEIGHT = 1080;
-sf::Color red(252, 63, 63);
-sf::Color blue(63, 120, 252);
 
 class GravitySource
 {
@@ -161,6 +159,9 @@ int main()
     float vel_x = 1.f;
     float vel_y = 0.f;
 
+    // for control
+    bool start_sim = false;
+
     // create particles
     for (size_t i = 0; i < x; i++)
     {
@@ -182,17 +183,25 @@ int main()
         sf::Event event;
 		while (window.pollEvent(event))
 		{
-            // if escape key is pressed
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-            {
-                window.close();
-            }
 
             // if closing window
             switch (event.type)
             {
             case sf::Event::Closed:
                 window.close();
+                break;
+
+            case sf::Event::KeyReleased:
+                if (event.key.code == sf::Keyboard::Escape)
+                {
+                    window.close();
+                }
+
+                if (event.key.code == sf::Keyboard::Space)
+                {
+					start_sim = !start_sim;
+                }
+
                 break;
 
             case sf::Event::MouseButtonPressed:
@@ -253,6 +262,8 @@ int main()
             }
         }
 
+        
+
         if (mouse_enabled)
         {
             mouse_source.update_pos(sf::Mouse::getPosition(window));
@@ -261,30 +272,36 @@ int main()
         // clear frame
         window.clear(sf::Color(36, 36, 36));
 
-        for (size_t i = 0; i < n; i++)
+        if (start_sim)
         {
-            if (mouse_enabled)
+            for (size_t i = 0; i < n; i++)
             {
-                particles[i].update_physics(mouse_source);
-            }
-            
-            for (size_t j = 0; j < sources.size(); j++)
-            {
-                particles[i].update_physics(sources[j]);
-            }
+                if (mouse_enabled)
+                {
+                    particles[i].update_physics(mouse_source);
+                }
 
-            // render the particle on the window
-			particles[i].render(window);
-        }
+                for (size_t j = 0; j < sources.size(); j++)
+                {
+                    particles[i].update_physics(sources[j]);
+                }
+            }
+		}
 
-        // render all sources
+        // render
         if (mouse_enabled)
         {
             mouse_source.render(window);
         }
         for (size_t i = 0; i < sources.size(); i++)
         {
+            // render sources
             sources[i].render(window);
+        }
+        for (size_t i = 0; i < n; i++)
+        {
+            // render the particles on the window
+            particles[i].render(window);
         }
 
         // show frame / draw calls
