@@ -15,8 +15,8 @@ GravitySource::GravitySource(float pos_x, float pos_y, float strength)
 
 void GravitySource::UpdatePos(sf::Vector2i pos)
 {
-	this->m_Pos.x = pos.x;
-	this->m_Pos.y = pos.y;
+	this->m_Pos.x = (float)pos.x;
+	this->m_Pos.y = (float)pos.y;
 	m_Shape.setPosition(this->m_Pos);
 }
 
