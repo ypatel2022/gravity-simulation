@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+#include <chrono>
 
 #include "Simulation.h"
 #include "Constants.h"
@@ -14,11 +15,10 @@ int main()
 	sf::View view = window.getDefaultView();
 	window.setFramerateLimit(144);
 
-
 	// simulation settings
-	sf::Vector2i gridSize(20, 20);
-	float radius = 10.0f;
-	float spacing = 25.0f;
+	sf::Vector2i gridSize(200, 200);
+	float radius = 1.0f;
+	float spacing = 3.0f;
 	float start_x = (WIDTH / 2.0f) - (gridSize.x * spacing / 2.0f) + radius + (spacing - radius * 2.0f) * 0.5f;
 	float start_y = (HEIGHT / 2.0f) - (gridSize.y * spacing / 2.0f) + radius + (spacing - radius * 2.0f) * 0.5f;
 	sf::Vector2f startPos(start_x, start_y);
@@ -30,12 +30,20 @@ int main()
 	sim.AddGravitySource(sf::Vector2f(WIDTH / 2.f, HEIGHT / 2.f - 200), 400);
 
 	// sim control
-	bool start_sim = false;
+	bool start_sim = true;
 
 	// to zoom in/out & panning view
 	sf::Vector2f old_pos;
 	bool moving = false;
 	float zoom = 1;
+
+	using std::chrono::high_resolution_clock;
+	using std::chrono::duration_cast;
+	using std::chrono::duration;
+	using std::chrono::milliseconds;
+
+	double total = 0.0;
+	int count = 0;
 
 	// while the window is kept open
 	while (window.isOpen())
@@ -128,7 +136,14 @@ int main()
 
 		if (start_sim)
 		{
+			auto t1 = high_resolution_clock::now();
 			sim.Step();
+			auto t2 = high_resolution_clock::now();
+
+			duration<double, std::milli> ms_double = t2 - t1;
+
+			total += ms_double.count();
+			count++;
 		}
 
 		// render
@@ -137,6 +152,8 @@ int main()
 		// show frame / draw calls
 		window.display();
 	}
+
+	std::cout << "Average time per step: " << total / (double)count << "ms" << std::endl;
 
 	return 0;
 }

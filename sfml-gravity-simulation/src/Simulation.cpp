@@ -1,5 +1,11 @@
 #include "Simulation.h"
 
+#include <execution>
+
+
+#define MULTI_THREADING 1
+
+
 Simulation::Simulation(sf::Vector2i gridSize, sf::Vector2f startPos, sf::Vector2f initialVelocity, float radius, float spacing)
 	: m_Radius(radius)
 {
@@ -60,11 +66,19 @@ void Simulation::Step()
 		// get particle
 		Particle& particle = m_ParticleObjects[i];
 
+
+#if MULTI_THREADING
+		// multithread physics updates
+		std::for_each(std::execution::par, m_GravitySources.begin(), m_GravitySources.end(), [&](GravitySource& gravitySource) {
+			particle.UpdatePhysics(gravitySource);
+			});
+#else
 		// update the physics for each gravity source
 		for (auto gravitySource : m_GravitySources)
 		{
 			particle.UpdatePhysics(gravitySource);
 		}
+#endif
 
 		// update vertex positions
 		float x = particle.GetPos().x;
